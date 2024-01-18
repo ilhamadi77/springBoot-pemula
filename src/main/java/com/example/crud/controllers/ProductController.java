@@ -1,6 +1,7 @@
 package com.example.crud.controllers;
 
 import com.example.crud.dtos.ResponseData;
+import com.example.crud.dtos.SearchData;
 import com.example.crud.models.entities.Product;
 import com.example.crud.models.entities.Supplier;
 import com.example.crud.services.ProductService;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -75,6 +78,27 @@ public class ProductController {
   @PostMapping("/{id}")
   public void addSuplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId){
     productService.addSupplier(supplier,productId);
+  }
+
+  @PostMapping("/search/name")
+  Product findByName(@RequestBody SearchData searchData){
+    return productService.findByName(searchData.getSearchKey());
+
+  }
+
+  @PostMapping("/search/nameLike")
+  List<Product> findByNameLike(@RequestBody SearchData searchData ){
+    return productService.findByNameLike(searchData.getSearchKey());
+  }
+
+  @GetMapping("/search/name/{categoryId}")
+  List<Product> findProducByCategory(@PathVariable("categoryId") Long categoryId){
+    return productService.findProductByCategory(categoryId);
+  }
+
+  @GetMapping("/search/name/{supplierId}")
+  List<Product> findBySupplier(@PathVariable("supplierId") Long supplierId){
+    return productService.findBySuppliers(supplierId);
   }
 
 

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,9 @@ public class ProductService {
 
   @Autowired
   private ProductRepos productRepos;
+
+  @Autowired
+  private SupplierService supplierService;
 
   public Product save(Product product){
 
@@ -45,9 +49,7 @@ public class ProductService {
       productRepos.deleteById(id);
   }
 
-  public List<Product> findByName(String name){
-    return productRepos.findByNameContains(name);
-  }
+
 
   public void addSupplier(Supplier supplier, Long productId){
     Product product = findOne(productId);
@@ -56,5 +58,25 @@ public class ProductService {
     }
     product.getSuppliers().add(supplier);
     save(product);
+  }
+
+ public Product findByName(String name){
+    return productRepos.findByName(name);
+  }
+
+  public List<Product> findByNameLike(String name){
+    return productRepos.findProductByNameLike("%"+name+"%");
+  }
+
+  public List<Product> findProductByCategory (Long categoryId){
+    return productRepos.findProductByCategory(categoryId);
+  }
+
+  public List<Product> findBySuppliers (Long supplierId){
+    Supplier supplier= supplierService.findOne(supplierId);
+    if(supplier == null){
+      return new ArrayList<Product>();
+    }
+    return productRepos.findBySupplier(supplier);
   }
 }

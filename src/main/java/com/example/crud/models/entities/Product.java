@@ -27,7 +27,7 @@ public class Product implements Serializable {
   private Double price;
 
   @ManyToOne
-  private Category category;
+    private Category category;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_supplier",
